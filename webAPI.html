@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://glitch.com/favicon.ico" />
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script></head>
+    
+    <link rel="stylesheet" href="style.css">
+    
+<body>
+    <title>Hello World!</title>
+
+
+    <div class="container p-0 text-center" style="height: 100%;">
+        <div class="row">
+            <div class="container">
+                <h1>List of Product</h1>
+
+                <div class="bg-yellow-50">
+                    <table id="productList" class="mb-2 w-100">
+                        <th>id</th>
+                        <th>Mã hàng hóa</th>
+                        <th>Tên hàng hóa</th>
+                        <th>Số lượng</th>
+                        <th>Ghi chú</th>
+                    </table>
+                </div>
+            </div>
+
+            <div class="container d-flex flex-column justify-content-center align-items-center">
+                <h1 class="text-center">Product Management</h1>
+
+                <div class="d-flex flex-column w-50">
+                    <form id="inputForm" class="btn-group d-flex flex-column" aria-label="Basic example">
+                        <input type="text" name="ma_hang_hoa" id="inputId" class="form-control"
+                            placeholder="Enter Ma Hang Hoa">
+                        <input type="text" name="ten_hang_hoa" id="inputTen" class="form-control"
+                            placeholder="Enter Ten Hang Hoa">
+                        <input type="number" name="so_luong" id="inputSoLuong" class="form-control"
+                            placeholder="Enter So Luong">
+                        <input type="text" name="ghi_chu" id="inputGhiChu" class="form-control"
+                            placeholder="Enter Ghi Chu">
+                    </form>
+
+                    <div class="btn-group d-flex flex-column" role="group" aria-label="Basic example">
+                        <button id="readProductForm" type="button" class="btn btn-primary">Read</button>
+                        <button id="createProductForm" type="button" class="btn btn-success">Create</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mt-3">
+                <h1> Fetch Product by ID </h1>
+                <input type="text" id="hangHoaIdInput" class="form-control" placeholder="Enter Hang Hoa ID">
+                <div class="btn-group d-flex flex-column" role="group" aria-label="Basic example">
+
+                    <button id="fetchHangHoaBtn" class="btn btn-primary mt-2">Fetch</button>
+                    <button id="deleteProductForm" class="btn btn-danger mt-2">Delete</button>
+                </div>
+                <div id="hangHoaDetails" class="mt-3"> </div>
+            </div>
+
+            <div class="container mt-3">
+                <h1>Update Product</h1>
+                <form id="myForm">
+                    <input type="text" name="ma_hang_hoa" id="mahanghoa" class="form-control"
+                        placeholder="Enter Ma Hang Hoa">
+                    <input type="text" name="ten_hang_hoa" id="tenhanghoa" class="form-control"
+                        placeholder="Enter Ten Hang Hoa">
+                    <input type="number" name="so_luong" id="soluong" class="form-control"
+                        placeholder="Enter So Luong">
+                    <input type="text" name="ghi_chu" id="ghichu" class="form-control" placeholder="Enter Ghi Chu">
+                </form>
+                <button id="updateProductForm" class="btn btn-warning w-100 text-light">Update</button>
+                <div id="hangHoaDetails" class="mt-3"></div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <script src="script.js"></script>
+    <!-- <script src="bootstrap/js/bootstrap.js"></script> -->
+
+</body>
+
+</html>
