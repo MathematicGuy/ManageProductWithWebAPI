@@ -80,12 +80,6 @@ function onUpdateProductFormClick() {
 function onDeleteProductFormClick() {
   const hangHoaId = document.getElementById('hangHoaIdInput').value;
   deleteHangHoa(hangHoaId);
-
-  // Re-render table after Deleting
-  fetch(`${API_BASE}/GetAllHang`)
-    .then(response => response.json())
-    .then(renderProductList)
-    .catch(console.error);
 }
 
 // Helper Functions
@@ -148,6 +142,12 @@ function createHang(hangHoaData) {
       console.error('Error:', error);
       // Handle error (e.g., display an error message)
     });
+
+    // Re-render table after Updating
+    fetch(`${API_BASE}/GetAllHang`)
+    .then(response => response.json())
+    .then(renderProductList)
+    .catch(console.error);
 }
 
 function updateHangHoa(id, formData) {
@@ -179,6 +179,12 @@ function deleteHangHoa(id) {
 
     )
     .catch(console.error);
+
+  // Re-render table after Updating
+  fetch(`${API_BASE}/GetAllHang`)
+  .then(response => response.json())
+  .then(renderProductList)
+  .catch(console.error);
 }
 
 function authorization() {
