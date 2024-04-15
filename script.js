@@ -8,7 +8,24 @@ const updateProductForm = document.getElementById('updateProductForm');
 const deleteProductForm = document.getElementById('deleteProductForm');
 
 // API Endpoints
+const username = '11170780';
+const password = '60-dayfreetrial';
+
+// const API_BASE = 'http://heval1st-001-site1.anytempurl.com';
 const API_BASE = 'https://localhost:7116/api/Hang';
+// Authenciation
+// const basic = `${username}:${password}`;
+// const basicAuthHeader = `Basic ${btoa(basic)}`;
+
+// const options = {
+//   method: 'GET',
+//   mode: 'no-cors',
+//   headers: {
+//     'Authorization': basicAuthHeader,
+//   }
+// };
+
+
 
 // Event Listeners
 createProductForm.addEventListener('click', onCreateProductFormClick);
@@ -17,6 +34,16 @@ readProductById.addEventListener('click', onReadProductByIdClick);
 updateProductForm.addEventListener('click', onUpdateProductFormClick);
 deleteProductForm.addEventListener('click', onDeleteProductFormClick);
 
+// const express = require("express");
+// const app = express()
+// const cors = require("cors")
+// app.use(
+//   cors({
+//     origin: "https://localhost:7116/api/"
+//   })
+// ) 
+
+
 // Event Handlers
 function onCreateProductFormClick(event) {
   createHang();
@@ -24,7 +51,12 @@ function onCreateProductFormClick(event) {
 
 function onReadProductFormClick(event) {
   fetch(`${API_BASE}/GetAllHang`)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
     .then(renderProductList)
     .catch(console.error);
 }
@@ -49,8 +81,8 @@ function onDeleteProductFormClick() {
   const hangHoaId = document.getElementById('hangHoaIdInput').value;
   deleteHangHoa(hangHoaId);
 
-    // Re-render table after Deleting
-    fetch(`${API_BASE}/GetAllHang`)
+  // Re-render table after Deleting
+  fetch(`${API_BASE}/GetAllHang`)
     .then(response => response.json())
     .then(renderProductList)
     .catch(console.error);
@@ -95,31 +127,28 @@ function createHang(hangHoaData) {
   const formData = new FormData(document.getElementById('inputForm'));
   const jsonData = Object.fromEntries(formData.entries());
 
-  fetch('https://localhost:7116/api/Hang/CreateHang', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(jsonData)
+  fetch(`${API_BASE}/CreateHang`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(jsonData)
   })
-  .then(response => {
+    .then(response => {
       if (!response.ok) {
-          throw new Error('Network response was not OK');
+        throw new Error('Network response was not OK');
       }
       return response.json();
-  })
-  .then(data => {
+    })
+    .then(data => {
       console.log('Success:', data);
       // Handle success (e.g., display a success message, clear the form)
-  })
-  .catch(error => {
+    })
+    .catch(error => {
       console.error('Error:', error);
       // Handle error (e.g., display an error message)
-  });
+    });
 }
-
-
-
 
 function updateHangHoa(id, formData) {
   fetch(`${API_BASE}/UpdateHang${id}`, {
@@ -127,11 +156,11 @@ function updateHangHoa(id, formData) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(formData)
   })
-  .then(response => response.json())
-  .then(hangHoa => {
-    console.log('Success:', hangHoa);
-  })
-  .catch(console.error);
+    .then(response => response.json())
+    .then(hangHoa => {
+      console.log('Success:', hangHoa);
+    })
+    .catch(console.error);
 
   // Re-render table after Updating
   fetch(`${API_BASE}/GetAllHang`)
@@ -145,9 +174,22 @@ function deleteHangHoa(id) {
     method: 'Delete',
     headers: { 'Content-Type': 'application/json' }
   })
-  .then(
-    response => response.json()
-    
+    .then(
+      response => response.json()
+
     )
-  .catch(console.error);
+    .catch(console.error);
+}
+
+function authorization() {
+  const basic = `${username}:${password}`;
+  const basicAuthHeader = `Basic ${btoa(basic)}`;
+
+  const options = {
+    method: 'GET',
+    mode: 'no-cors',
+    headers: {
+      'Authorization': basicAuthHeader,
+    }
+  };
 }
