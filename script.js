@@ -8,10 +8,41 @@ const updateProductForm = document.getElementById('updateProductForm');
 const deleteProductForm = document.getElementById('deleteProductForm');
 
 // API Endpoints
-const API_BASE = 'https://localhost:7116/api/Hang';
+// const API_BASE = 'https://localhost:7116/api/Hang';
+// Authenciation
+const username = '11170780';
+const password = '60-dayfreetrial';
+const API_BASE = 'http://heval1st-001-site1.anytempurl.com/';
+
+
+const basic = `${username}:${password}`;
+const basicAuthHeader = `Basic ${btoa(basic)}`;
+
+const options = {
+  method: 'GET',
+  mode: 'no-cors',
+  headers: {
+    'Authorization': basicAuthHeader,
+  }
+};
+
 
 // Event Listeners
-createProductForm.addEventListener('click', onCreateProductFormClick);
+createProductForm.addEventListener('click', () => {
+  // const basic = `${username}:${password}`;
+  // const basicAuthHeader = `Basic ${btoa(basic)}`;
+
+  // const options = {
+  //   method: 'GET',
+  //   mode: 'no-cors',
+  //   headers: {
+  //     'Authorization': basicAuthHeader
+  //   }
+  // };
+
+
+  onCreateProductFormClick();
+});
 readProductForm.addEventListener('click', onReadProductFormClick);
 readProductById.addEventListener('click', onReadProductByIdClick);
 updateProductForm.addEventListener('click', onUpdateProductFormClick);
@@ -118,9 +149,6 @@ function createHang(hangHoaData) {
   });
 }
 
-
-
-
 function updateHangHoa(id, formData) {
   fetch(`${API_BASE}/UpdateHang${id}`, {
     method: 'PUT',
@@ -150,4 +178,17 @@ function deleteHangHoa(id) {
     
     )
   .catch(console.error);
+}
+
+function authorization(){
+  const basic = `${username}:${password}`;
+  const basicAuthHeader = `Basic ${btoa(basic)}`;
+
+  const options = {
+    method: 'GET',
+    mode: 'no-cors',
+    headers: {
+      'Authorization': basicAuthHeader,
+    }
+  };
 }
