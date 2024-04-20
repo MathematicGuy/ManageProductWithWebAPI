@@ -11,8 +11,8 @@ const deleteProductForm = document.getElementById('deleteProductForm');
 const username = '11170780';
 const password = '60-dayfreetrial';
 
-// const API_BASE = 'http://heval1st-001-site1.anytempurl.com';
-const API_BASE = 'https://localhost:7116/api/Hang';
+const API_BASE = 'http://heval1st-001-site1.anytempurl.com/api/Hang';
+// const API_BASE = 'https://localhost:7116/api/Hang';
 // Authenciation
 // const basic = `${username}:${password}`;
 // const basicAuthHeader = `Basic ${btoa(basic)}`;
@@ -67,7 +67,10 @@ function onReadProductByIdClick() {
   fetch(`${API_BASE}/HangById${hangHoaId}`)
     .then(response => response.json())
     .then(renderProductDetails)
-    .catch(() => alert('Error fetching Hang Hoa data.'));
+    .catch(error => {
+      console.error('Error:', error);
+      alert("Error: Product ID is Invalid.");
+    });
 }
 
 function onUpdateProductFormClick() {
@@ -94,7 +97,13 @@ function renderProductList(data) {
     <th>Ghi chú</th> 
   `;
   productList.appendChild(tableHeader);
+
   data.forEach(hangHoa => {
+    if (hangHoa.id === null) { // Check for null ID
+      alert("Error: Hang Hoa entry has a missing ID"); // Display the pop-up
+      return; // Skip rendering this entry
+    }
+
     const itemElement = document.createElement('tr');
     itemElement.innerHTML = `
       <td>${hangHoa.id}</td>
@@ -121,6 +130,28 @@ function createHang(hangHoaData) {
   const formData = new FormData(document.getElementById('inputForm'));
   const jsonData = Object.fromEntries(formData.entries());
 
+
+  // Validation
+  const errors = [];
+
+  if (!isValidHangHoaData(jsonData.ma_hang_hoa)) {
+    errors.push("Error: ma_hang_hoa must be 9 digit.");
+  }
+  if (!jsonData.ma_hang_hoa || !(/^\d{9}$/.test(jsonData.ma_hang_hoa))) {
+        errors.push("Error: ten_hang_hoa must be larger than 0.");
+  }
+
+  if (!jsonData.so_luong || jsonData.so_luong <= 0 || !Number.isInteger(jsonData.so_luong)) {  
+    errors.push("Error: so_luong must be larger than 0.");
+  }
+
+  if (errors.length > 0) {
+    alert(errors.join("\n"));
+    return; // Stop submission if there are errors
+  }
+
+  
+
   fetch(`${API_BASE}/CreateHang`, {
     method: 'POST',
     headers: {
@@ -140,33 +171,76 @@ function createHang(hangHoaData) {
     })
     .catch(error => {
       console.error('Error:', error);
+      alert("Error: Số lượng cannot be negative.");
+
       // Handle error (e.g., display an error message)
     });
-
-    // Re-render table after Updating
-    fetch(`${API_BASE}/GetAllHang`)
-    .then(response => response.json())
-    .then(renderProductList)
-    .catch(console.error);
-}
-
-function updateHangHoa(id, formData) {
-  fetch(`${API_BASE}/UpdateHang${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(formData)
-  })
-    .then(response => response.json())
-    .then(hangHoa => {
-      console.log('Success:', hangHoa);
-    })
-    .catch(console.error);
 
   // Re-render table after Updating
   fetch(`${API_BASE}/GetAllHang`)
     .then(response => response.json())
     .then(renderProductList)
     .catch(console.error);
+}
+
+
+function updateHangHoa(id, jsonData) {
+  // Validation
+  const errors = [];
+
+  if (!jsonData.ma_hang_hoa || !(/^\d{9}$/.test(jsonData.ma_hang_hoa))) {
+    errors.push("Error: ma_hang_hoa must be 9 digit.");
+  }
+  if (!jsonData.ten_hang_hoa || !(/^[a-zA-Z\s]*$/.test(jsonData.ten_hang_hoa))) {
+      errors.push("Error: ten_hang_hoa must be a string with no special character or number");
+  }
+
+  if (isValidHangHoaData(jsonData.so_luong)) {
+    errors.push("Error: so_luong must be larger than 0.");
+  }
+
+  if (errors.length > 0) {
+    alert(errors.join("\n"));
+    return; // Stop submission if there are errors
+  }
+
+  fetch(`${API_BASE}/UpdateHang${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData)
+  })
+    .then(response => {
+      if (!response.ok) {
+        if (response.status === 400) {
+          alert("ma_hang_hoa must be a 9-digit number");
+          return response.json();  // Try to parse error details from the response 
+        } else {
+          throw new Error('Network response was not OK'); // Generic error handling
+        }
+      }
+      return response.json(); // Proceed if successful
+    })
+    .then(data => {
+      // If BadRequest, data will likely contain error information
+      if (data.error) { // Assuming your API returns an 'error' property
+        alert(data.error); // Display the error message
+      } else {
+        console.log('Success:', data);
+        // Your success handling logic (if no error received from API)
+      }
+    })
+    .catch(error => {
+      alert("Fetch before Update. Can only Update through Id", error);
+    })
+
+
+  // Re-render table after Updating
+  fetch(`${API_BASE}/GetAllHang`)
+    .then(response => response.json())
+    .then(renderProductList)
+    .catch(error => {
+      alert("Error: ", error);
+    });
 }
 
 function deleteHangHoa(id) {
@@ -182,20 +256,25 @@ function deleteHangHoa(id) {
 
   // Re-render table after Updating
   fetch(`${API_BASE}/GetAllHang`)
-  .then(response => response.json())
-  .then(renderProductList)
-  .catch(console.error);
+    .then(response => response.json())
+    .then(renderProductList)
+    .catch(console.error);
 }
 
-function authorization() {
-  const basic = `${username}:${password}`;
-  const basicAuthHeader = `Basic ${btoa(basic)}`;
-
-  const options = {
-    method: 'GET',
-    mode: 'no-cors',
-    headers: {
-      'Authorization': basicAuthHeader,
-    }
-  };
+// validate if so luong hang > 0 or not 
+function isValidHangHoaData(hangHoaData) {
+  return hangHoaData.so_luong > 0;
 }
+
+// function authorization() {
+//   const basic = `${username}:${password}`;
+//   const basicAuthHeader = `Basic ${btoa(basic)}`;
+
+//   const options = {
+//     method: 'GET',
+//     mode: 'no-cors',
+//     headers: {
+//       'Authorization': basicAuthHeader,
+//     }
+//   };
+// }
