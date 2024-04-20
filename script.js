@@ -130,11 +130,27 @@ function createHang(hangHoaData) {
   const formData = new FormData(document.getElementById('inputForm'));
   const jsonData = Object.fromEntries(formData.entries());
 
+
   // Validation
-  if (!isValidHangHoaData(jsonData)) {
-    alert("Error: so_luong must be larger than 0.");
-    return; // Stop submission if invalid
+  const errors = [];
+
+  if (!isValidHangHoaData(jsonData.ma_hang_hoa)) {
+    errors.push("Error: ma_hang_hoa must be 9 digit.");
   }
+  if (!jsonData.ma_hang_hoa || !(/^\d{9}$/.test(jsonData.ma_hang_hoa))) {
+        errors.push("Error: ten_hang_hoa must be larger than 0.");
+  }
+
+  if (!jsonData.so_luong || jsonData.so_luong <= 0 || !Number.isInteger(jsonData.so_luong)) {  
+    errors.push("Error: so_luong must be larger than 0.");
+  }
+
+  if (errors.length > 0) {
+    alert(errors.join("\n"));
+    return; // Stop submission if there are errors
+  }
+
+  
 
   fetch(`${API_BASE}/CreateHang`, {
     method: 'POST',
@@ -168,7 +184,26 @@ function createHang(hangHoaData) {
 }
 
 
-function updateHangHoa(id, formData) {
+function updateHangHoa(id, jsonData) {
+  // Validation
+  const errors = [];
+
+  if (!jsonData.ma_hang_hoa || !(/^\d{9}$/.test(jsonData.ma_hang_hoa))) {
+    errors.push("Error: ma_hang_hoa must be 9 digit.");
+  }
+  if (!jsonData.ten_hang_hoa || !(/^[a-zA-Z\s]*$/.test(jsonData.ten_hang_hoa))) {
+      errors.push("Error: ten_hang_hoa must be a string with no special character or number");
+  }
+
+  if (isValidHangHoaData(jsonData.so_luong)) {
+    errors.push("Error: so_luong must be larger than 0.");
+  }
+
+  if (errors.length > 0) {
+    alert(errors.join("\n"));
+    return; // Stop submission if there are errors
+  }
+
   fetch(`${API_BASE}/UpdateHang${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -177,7 +212,7 @@ function updateHangHoa(id, formData) {
     .then(response => {
       if (!response.ok) {
         if (response.status === 400) {
-          alert("ma_hang_hoa must be a 2-digit number");
+          alert("ma_hang_hoa must be a 9-digit number");
           return response.json();  // Try to parse error details from the response 
         } else {
           throw new Error('Network response was not OK'); // Generic error handling
@@ -231,15 +266,15 @@ function isValidHangHoaData(hangHoaData) {
   return hangHoaData.so_luong > 0;
 }
 
-function authorization() {
-  const basic = `${username}:${password}`;
-  const basicAuthHeader = `Basic ${btoa(basic)}`;
+// function authorization() {
+//   const basic = `${username}:${password}`;
+//   const basicAuthHeader = `Basic ${btoa(basic)}`;
 
-  const options = {
-    method: 'GET',
-    mode: 'no-cors',
-    headers: {
-      'Authorization': basicAuthHeader,
-    }
-  };
-}
+//   const options = {
+//     method: 'GET',
+//     mode: 'no-cors',
+//     headers: {
+//       'Authorization': basicAuthHeader,
+//     }
+//   };
+// }
