@@ -177,7 +177,7 @@ function createHang(hangHoaData) {
     });
 
   // Re-render table after Updating
-  fetch(`${API_BASE}/GetAllHang`)
+  fetch(`${API_BASE}/GetAllHangs`)
     .then(response => response.json())
     .then(renderProductList)
     .catch(console.error);
