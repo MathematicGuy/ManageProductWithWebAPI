@@ -125,7 +125,6 @@ function renderProductDetails(hangHoa) {
     <p><strong>Ghi chú:</strong> ${hangHoa.ghi_chu}</p>
   `;
 }
-GetAllHangss
 function createHang(hangHoaData) {
   const formData = new FormData(document.getElementById('inputForm'));
   const jsonData = Object.fromEntries(formData.entries());
