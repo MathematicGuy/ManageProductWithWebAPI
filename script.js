@@ -50,7 +50,7 @@ function onCreateProductFormClick(event) {
 }
 
 function onReadProductFormClick(event) {
-  fetch(`${API_BASE}/GetAllHang`)
+  fetch(`${API_BASE}/GetAllHangs`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -125,7 +125,7 @@ function renderProductDetails(hangHoa) {
     <p><strong>Ghi chú:</strong> ${hangHoa.ghi_chu}</p>
   `;
 }
-
+GetAllHangss
 function createHang(hangHoaData) {
   const formData = new FormData(document.getElementById('inputForm'));
   const jsonData = Object.fromEntries(formData.entries());
@@ -177,7 +177,7 @@ function createHang(hangHoaData) {
     });
 
   // Re-render table after Updating
-  fetch(`${API_BASE}/GetAllHangs`)
+  fetch(`${API_BASE}/GetAllHangss`)
     .then(response => response.json())
     .then(renderProductList)
     .catch(console.error);
@@ -235,7 +235,7 @@ function updateHangHoa(id, jsonData) {
 
 
   // Re-render table after Updating
-  fetch(`${API_BASE}/GetAllHang`)
+  fetch(`${API_BASE}/GetAllHangs`)
     .then(response => response.json())
     .then(renderProductList)
     .catch(error => {
@@ -255,7 +255,7 @@ function deleteHangHoa(id) {
     .catch(console.error);
 
   // Re-render table after Updating
-  fetch(`${API_BASE}/GetAllHang`)
+  fetch(`${API_BASE}/GetAllHangs`)
     .then(response => response.json())
     .then(renderProductList)
     .catch(console.error);
