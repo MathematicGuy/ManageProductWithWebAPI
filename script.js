@@ -50,7 +50,7 @@ function onCreateProductFormClick(event) {
 }
 
 function onReadProductFormClick(event) {
-  fetch(`${API_BASE}/GetAllHang`)
+  fetch(`${API_BASE}/GetAllHangs`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
