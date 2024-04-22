@@ -11,7 +11,7 @@ const deleteProductForm = document.getElementById('deleteProductForm');
 const username = '11170780';
 const password = '60-dayfreetrial';
 
-const API_BASE = 'http://heval1st-001-site1.anytempurl.com/api/Hang';
+const API_BASE = 'https://heval1st-001-site1.anytempurl.com/api/Hang';
 // const API_BASE = 'https://localhost:7116/api/Hang';
 // Authenciation
 // const basic = `${username}:${password}`;
