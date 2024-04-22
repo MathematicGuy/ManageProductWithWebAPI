@@ -50,7 +50,7 @@ function onCreateProductFormClick(event) {
 }
 
 function onReadProductFormClick(event) {
-  fetch(`${API_BASE}/GetAllHangs`)
+  fetch(`${API_BASE}/GetAllHang`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -176,7 +176,7 @@ function createHang(hangHoaData) {
     });
 
   // Re-render table after Updating
-  fetch(`${API_BASE}/GetAllHangss`)
+  fetch(`${API_BASE}/GetAllHang`)
     .then(response => response.json())
     .then(renderProductList)
     .catch(console.error);
@@ -234,7 +234,7 @@ function updateHangHoa(id, jsonData) {
 
 
   // Re-render table after Updating
-  fetch(`${API_BASE}/GetAllHangs`)
+  fetch(`${API_BASE}/GetAllHang`)
     .then(response => response.json())
     .then(renderProductList)
     .catch(error => {
@@ -254,7 +254,7 @@ function deleteHangHoa(id) {
     .catch(console.error);
 
   // Re-render table after Updating
-  fetch(`${API_BASE}/GetAllHangs`)
+  fetch(`${API_BASE}/GetAllHang`)
     .then(response => response.json())
     .then(renderProductList)
     .catch(console.error);
